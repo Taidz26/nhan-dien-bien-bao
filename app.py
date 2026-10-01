@@ -20,7 +20,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.markdown("<h1>🚦 HỆ THỐNG NHẬN DIỆN BIỂN BÁO GIAO THÔNG</h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; color: #666; font-size: 18px;'>Tích hợp Trí tuệ Nhân tạo YOLOv8 - Đọc luật giao thông thời gian thực</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: #666; font-size: 18px;'>Chương trình nhận diện biển báo giao </p>", unsafe_allow_html=True)
 st.markdown("---")
 
 # ==========================================
@@ -107,7 +107,10 @@ with st.sidebar:
     
     st.markdown("---")
     with st.expander("ℹ️ Giới thiệu dự án"):
-        st.write("Dự án sử dụng mô hình YOLOv8 để nhận diện biển báo và tự động hiển thị luật giao thông bằng tiếng Việt trực tiếp lên khung hình.")
+        st.write("Dự án sử dụng mô hình YOLOv8 để nhận diện biển báo và tự động hiển thị luật giao thông bằng tiếng Việt trực tiếp lên khung hình.
+        Thành viên: Nguyễn Sỹ Tấn Tài 
+                    Lương Văn Trường
+                    Trần Quốc Toàn")
 
 # ==========================================
 # 4. XỬ LÝ LÕI AI & VẼ HIGHLIGHT
