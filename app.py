@@ -100,7 +100,7 @@ tu_dien_yeu_cau = {
 # 3. THANH BÊN (SIDEBAR) CHUYÊN NGHIỆP
 # ==========================================
 with st.sidebar:
-    st.image("https://cdn-icons-png.flaticon.com/512/3253/3253083.png", width=120)
+    st.image("logo.jpg", width=120)
     st.title("⚙️ Bảng Điều Khiển")
     st.markdown("Vui lòng chọn chế độ quét:")
     lua_chon = st.radio("", ("🖼️ Phân tích Ảnh Tĩnh", "🎥 Quét qua Webcam"))
