@@ -107,7 +107,7 @@ with st.sidebar:
     
     st.markdown("---")
     with st.expander("ℹ️ Giới thiệu dự án"):
-        st.write("Dự án sử dụng mô hình YOLOv8 để nhận diện biển báo và tự động hiển thị luật giao thông bằng tiếng Việt trực tiếp lên khung hình.<br>Thành viên: Nguyễn Sỹ Tấn Tài <br> Lương Văn Trường <br> Trần Quốc Toàn", unsafe_allow_html=True)
+        st.write("Dự án sử dụng mô hình YOLOv8 để nhận diện biển báo và tự động hiển thị luật giao thông bằng tiếng Việt trực tiếp lên khung hình.<br>Thành viên:<br> Nguyễn Sỹ Tấn Tài <br> Lương Văn Trường <br> Trần Quốc Toàn", unsafe_allow_html=True)
 # ==========================================
 # 4. XỬ LÝ LÕI AI & VẼ HIGHLIGHT
 # ==========================================
