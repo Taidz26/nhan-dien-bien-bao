@@ -20,7 +20,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.markdown("<h1>🚦 HỆ THỐNG NHẬN DIỆN BIỂN BÁO GIAO THÔNG</h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; color: #666; font-size: 18px;'>Chương trình nhận diện biển báo giao </p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: #666; font-size: 18px;'>Bài tập: Chương trình nhận diện biển báo giao thông</p>", unsafe_allow_html=True)
 st.markdown("---")
 
 # ==========================================
