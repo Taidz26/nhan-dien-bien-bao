@@ -135,7 +135,6 @@ def phan_tich_va_ve(anh_dau_vao):
     return cv2.cvtColor(anh_hien_thi, cv2.COLOR_BGR2RGB)
 
 # ==========================================
-## ==========================================
 # 5. HIỂN THỊ THEO CHẾ ĐỘ
 # ==========================================
 if lua_chon == "🖼️ Phân tích Ảnh Tĩnh":
@@ -143,39 +142,40 @@ if lua_chon == "🖼️ Phân tích Ảnh Tĩnh":
     
     if uploaded_file is not None:
         col1, col2 = st.columns(2) 
-        image = Image.open(uploaded_file)
-        anh_goc = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR) 
+        # Đọc ảnh chuẩn xác thành mảng Numpy
+        image_pil = Image.open(uploaded_file)
+        anh_goc_rgb = np.array(image_pil)
+        anh_goc_bgr = cv2.cvtColor(anh_goc_rgb, cv2.COLOR_RGB2BGR)
         
         with col1:
             st.info("📸 Ảnh Gốc")
-            st.image(image, use_container_width=True)
+            # Hiển thị trực tiếp ảnh RGB
+            st.image(anh_goc_rgb)
 
         with col2:
             st.success("🤖 Trí tuệ Nhân tạo Phân tích")
             with st.spinner("AI đang tính toán..."):
-                anh_ket_qua_rgb = phan_tich_va_ve(anh_goc)
-                st.image(anh_ket_qua_rgb, use_container_width=True)
+                anh_ket_qua_rgb = phan_tich_va_ve(anh_goc_bgr)
+                st.image(anh_ket_qua_rgb)
 
 elif lua_chon == "🎥 Quét qua Webcam":
     st.info("💡 Trình duyệt sẽ yêu cầu quyền dùng Camera. Hãy giơ biển báo lên và bấm chụp!")
     
-    # Dùng tính năng gọi Camera trực tiếp trên Web của Streamlit
     anh_webcam = st.camera_input("Máy ảnh của bạn")
     
     if anh_webcam is not None:
         col1, col2 = st.columns(2)
         
-        # Chuyển đổi dữ liệu ảnh chụp từ Web sang định dạng AI đọc được
-        image = Image.open(anh_webcam)
-        anh_goc = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
+        image_pil = Image.open(anh_webcam)
+        anh_goc_rgb = np.array(image_pil)
+        anh_goc_bgr = cv2.cvtColor(anh_goc_rgb, cv2.COLOR_RGB2BGR)
         
         with col1:
             st.info("📸 Ảnh bạn vừa chụp")
-            st.image(image, use_container_width=True)
+            st.image(anh_goc_rgb)
             
         with col2:
             st.success("🤖 Kết quả nhận diện")
             with st.spinner("AI đang tính toán..."):
-                anh_ket_qua_rgb = phan_tich_va_ve(anh_goc)
-                st.image(anh_ket_qua_rgb, use_container_width=True)
-            #py -m streamlit run app.py
+                anh_ket_qua_rgb = phan_tich_va_ve(anh_goc_bgr)
+                st.image(anh_ket_qua_rgb)
