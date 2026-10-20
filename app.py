@@ -101,13 +101,13 @@ tu_dien_yeu_cau = {
 # ==========================================
 with st.sidebar:
     st.image("logo.jpg", width=120)
-    st.title("⚙️ Bảng Điều Khiển")
+    
     
     st.markdown("---")
     with st.expander("ℹ️ Giới thiệu dự án"):
         st.markdown("Dự án sử dụng mô hình YOLOv8 để nhận diện biển báo và tự động hiển thị luật giao thông bằng tiếng Việt trực tiếp lên khung hình.<br><br><b>Thành viên:</b><br> - Nguyễn Sỹ Tấn Tài <br> - Lương Văn Trường <br> - Trần Quốc Toàn", unsafe_allow_html=True)
 
-    
+    st.title("⚙️ Bảng Điều Khiển")
     st.markdown("**1. Chọn nguồn ảnh:**")
     lua_chon = st.radio("", ("🖼️ Phân tích Ảnh Tĩnh", "🎥 Camera Thời Gian Thực"))
     
@@ -177,10 +177,16 @@ elif lua_chon == "🎥 Camera Thời Gian Thực":
     st.info("💡 Bấm 'START' và cấp quyền truy cập Camera. Đưa biển báo vào khung hình, AI sẽ nhận diện liên tục!")
     
     # Cấu hình máy chủ trung gian để luồng video webRTC không bị chặn
+   # Cấu hình danh sách máy chủ STUN mạnh hơn để vượt tường lửa mạng
     RTC_CONFIGURATION = RTCConfiguration(
-        {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
+        {"iceServers": [
+            {"urls": ["stun:stun.l.google.com:19302"]},
+            {"urls": ["stun:stun1.l.google.com:19302"]},
+            {"urls": ["stun:stun2.l.google.com:19302"]},
+            {"urls": ["stun:stun3.l.google.com:19302"]},
+            {"urls": ["stun:stun4.l.google.com:19302"]},
+        ]}
     )
-    
     # Hàm xử lý từng khung hình video theo thời gian thực
     def video_frame_callback(frame: av.VideoFrame) -> av.VideoFrame:
         img_bgr = frame.to_ndarray(format="bgr24")
