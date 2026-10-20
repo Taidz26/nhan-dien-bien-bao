@@ -23,10 +23,7 @@ st.markdown("<h1>🚦 HỆ THỐNG NHẬN DIỆN BIỂN BÁO GIAO THÔNG</h1>", 
 st.markdown("<p style='text-align: center; color: #666; font-size: 18px;'>Tích hợp Trí tuệ Nhân tạo YOLOv8 - Đọc luật giao thông thời gian thực</p>", unsafe_allow_html=True)
 st.markdown("---")
  st.markdown("---")
-    with st.expander("ℹ️ Giới thiệu dự án"):
-        st.write("Dự án sử dụng mô hình YOLOv8 để nhận diện biển báo và tự động hiển thị luật giao thông bằng tiếng Việt trực tiếp lên khung hình.<br>Thành viên:<br> Nguyễn Sỹ Tấn Tài <br> Lương Văn Trường <br> Trần Quốc Toàn", unsafe_allow_html=True)
-
-# ==========================================
+  
 # 2. TẢI MÔ HÌNH & TỪ ĐIỂN
 # ==========================================
 @st.cache_resource
@@ -108,6 +105,11 @@ with st.sidebar:
     
     st.markdown("**1. Chọn nguồn ảnh:**")
     lua_chon = st.radio("", ("🖼️ Phân tích Ảnh Tĩnh", "🎥 Camera Thời Gian Thực"))
+    File "/mount/src/nhan-dien-bien-bao/app.py", line 25
+   st.markdown("---")
+   st.markdown("---")
+ st.expander("ℹ️ Giới thiệu dự án"):
+        st.write("Dự án sử dụng mô hình YOLOv8 để nhận diện biển báo và tự động hiển thị luật giao thông bằng tiếng Việt trực tiếp lên khung hình.<br>Thành viên:<br> Nguyễn Sỹ Tấn Tài <br> Lương Văn Trường <br> Trần Quốc Toàn", unsafe_allow_html=True)
     
     st.markdown("---")
     st.markdown("**2. Bộ lọc hình ảnh:**")
