@@ -22,7 +22,6 @@ st.markdown("""
 st.markdown("<h1>🚦 HỆ THỐNG NHẬN DIỆN BIỂN BÁO GIAO THÔNG</h1>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center; color: #666; font-size: 18px;'>Tích hợp Trí tuệ Nhân tạo YOLOv8 - Đọc luật giao thông thời gian thực</p>", unsafe_allow_html=True)
 st.markdown("---")
- st.markdown("---")
   
 # 2. TẢI MÔ HÌNH & TỪ ĐIỂN
 # ==========================================
