@@ -3,6 +3,8 @@ from ultralytics import YOLO
 import cv2
 import numpy as np
 from PIL import Image
+from streamlit_webrtc import webrtc_streamer, WebRtcMode, RTCConfiguration
+import av
 
 # ==========================================
 # 1. CẤU HÌNH GIAO DIỆN PRO
@@ -95,35 +97,28 @@ tu_dien_yeu_cau = {
 }
 
 # ==========================================
-# 3. THANH BÊN (SIDEBAR) & TÍNH NĂNG MỚI
+# 3. THANH BÊN (SIDEBAR) & CHỌN CHẾ ĐỘ
 # ==========================================
 with st.sidebar:
-    st.image("logo.jpg", width=120)
+    st.image("https://cdn-icons-png.flaticon.com/512/3253/3253083.png", width=120)
     st.title("⚙️ Bảng Điều Khiển")
     
     st.markdown("**1. Chọn nguồn ảnh:**")
-    lua_chon = st.radio("", ("🖼️ Phân tích Ảnh Tĩnh", "🎥 Quét qua Webcam"))
+    lua_chon = st.radio("", ("🖼️ Phân tích Ảnh Tĩnh", "🎥 Camera Thời Gian Thực"))
     
     st.markdown("---")
     st.markdown("**2. Bộ lọc hình ảnh:**")
-    bat_lam_net = st.checkbox("✨ Tự động làm nét ảnh", value=False, help="Giúp ảnh mờ trở nên rõ ràng hơn để AI dễ nhận diện.")
-    
-    st.markdown("---")
-    with st.expander("ℹ️ Giới thiệu dự án"):
-        st.write("Dự án sử dụng mô hình YOLOv8 để nhận diện biển báo và tự động hiển thị luật giao thông.")
+    bat_lam_net = st.checkbox("✨ Tự động làm nét (Dùng cho ảnh mờ)", value=False)
 
 # ==========================================
-# 4. XỬ LÝ LÕI AI & LÀM NÉT
+# 4. HÀM XỬ LÝ LÕI AI
 # ==========================================
 def lam_net_anh(image):
-    # Tạo ma trận filter để tăng cường độ sắc nét (Sharpening kernel)
-    kernel = np.array([[0, -1, 0], 
-                       [-1, 5, -1], 
-                       [0, -1, 0]])
+    kernel = np.array([[0, -1, 0], [-1, 5, -1], [0, -1, 0]])
     return cv2.filter2D(image, -1, kernel)
 
-def phan_tich_va_ve(anh_dau_vao):
-    ket_qua = model.predict(source=anh_dau_vao, conf=0.15, verbose=False)
+def phan_tich_va_ve(anh_bgr):
+    ket_qua = model.predict(source=anh_bgr, conf=0.15, verbose=False)
     anh_hien_thi = ket_qua[0].plot()
     cac_bien = ket_qua[0].boxes.cls
     ds_nhan = model.names
@@ -143,41 +138,58 @@ def phan_tich_va_ve(anh_dau_vao):
         cv2.putText(anh_hien_thi, cau_yeu_cau, (toa_do_x, toa_do_y), font, font_scale, (0,0,0), 2)
         toa_do_y -= (th + baseline + 30)
         
-    return cv2.cvtColor(anh_hien_thi, cv2.COLOR_BGR2RGB)
+    return anh_hien_thi
 
 # ==========================================
-# 5. HIỂN THỊ THEO CHẾ ĐỘ
+# 5. GIAO DIỆN HIỂN THỊ
 # ==========================================
-def xu_ly_hien_thi(uploaded_image):
-    col1, col2 = st.columns(2) 
-    
-    # Đọc ảnh chuẩn xác thành mảng Numpy
-    image_pil = Image.open(uploaded_image)
-    anh_goc_rgb = np.array(image_pil)
-    
-    # Nếu bật chế độ làm nét
-    if bat_lam_net:
-        anh_goc_rgb = lam_net_anh(anh_goc_rgb)
-        
-    anh_goc_bgr = cv2.cvtColor(anh_goc_rgb, cv2.COLOR_RGB2BGR)
-    
-    with col1:
-        st.info("📸 Ảnh Đầu Vào")
-        st.image(anh_goc_rgb)
-
-    with col2:
-        st.success("🤖 AI Phân Tích & Nhận Diện")
-        with st.spinner("AI đang tính toán..."):
-            anh_ket_qua_rgb = phan_tich_va_ve(anh_goc_bgr)
-            st.image(anh_ket_qua_rgb)
-
 if lua_chon == "🖼️ Phân tích Ảnh Tĩnh":
     uploaded_file = st.file_uploader("Kéo thả hoặc chọn ảnh từ máy tính...", type=["jpg", "jpeg", "png"])
+    
     if uploaded_file is not None:
-        xu_ly_hien_thi(uploaded_file)
+        col1, col2 = st.columns(2) 
+        image_pil = Image.open(uploaded_file)
+        anh_goc_rgb = np.array(image_pil)
+        
+        if bat_lam_net:
+            anh_goc_rgb = lam_net_anh(anh_goc_rgb)
+            
+        anh_goc_bgr = cv2.cvtColor(anh_goc_rgb, cv2.COLOR_RGB2BGR)
+        
+        with col1:
+            st.info("📸 Ảnh Đầu Vào")
+            st.image(anh_goc_rgb)
 
-elif lua_chon == "🎥 Quét qua Webcam":
-    st.info("💡 Trình duyệt sẽ yêu cầu quyền dùng Camera. Hãy giơ biển báo lên và bấm chụp!")
-    anh_webcam = st.camera_input("Máy ảnh của bạn")
-    if anh_webcam is not None:
-        xu_ly_hien_thi(anh_webcam)
+        with col2:
+            st.success("🤖 AI Phân Tích")
+            with st.spinner("AI đang tính toán..."):
+                anh_ket_qua_bgr = phan_tich_va_ve(anh_goc_bgr)
+                st.image(cv2.cvtColor(anh_ket_qua_bgr, cv2.COLOR_BGR2RGB))
+
+elif lua_chon == "🎥 Camera Thời Gian Thực":
+    st.info("💡 Bấm 'START' và cấp quyền truy cập Camera. Đưa biển báo vào khung hình, AI sẽ nhận diện liên tục!")
+    
+    # Cấu hình máy chủ trung gian để luồng video webRTC không bị chặn
+    RTC_CONFIGURATION = RTCConfiguration(
+        {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
+    )
+    
+    # Hàm xử lý từng khung hình video theo thời gian thực
+    def video_frame_callback(frame: av.VideoFrame) -> av.VideoFrame:
+        img_bgr = frame.to_ndarray(format="bgr24")
+        
+        if bat_lam_net:
+            img_bgr = lam_net_anh(img_bgr)
+            
+        img_ket_qua_bgr = phan_tich_va_ve(img_bgr)
+        return av.VideoFrame.from_ndarray(img_ket_qua_bgr, format="bgr24")
+
+    # Bật khung phát video stream
+    webrtc_streamer(
+        key="nhan-dien-realtime",
+        mode=WebRtcMode.SENDRECV,
+        rtc_configuration=RTC_CONFIGURATION,
+        video_frame_callback=video_frame_callback,
+        media_stream_constraints={"video": True, "audio": False},
+        async_processing=True,
+    )
